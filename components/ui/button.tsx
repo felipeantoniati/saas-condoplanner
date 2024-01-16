@@ -9,6 +9,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        login:
+          "bg-blue-800 text-primary-foreground shadow hover:bg-blue-500",
         default:
           "bg-primary text-primary-foreground shadow hover:bg-primary/90",
         destructive:

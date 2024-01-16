@@ -9,7 +9,7 @@ const RegisterPage = () => {
                         headerLabel="Crie sua conta"
                         backButtonLabel="Já possui uma conta ?"
                         backButtonHref="/auth/login"
-                        showSocial
+                        // showSocial
                   >
                         <RegisterForm />
                   </CardWrapper>

@@ -7,6 +7,8 @@ import { db } from "@/lib/db";
 import { RegisterSchema } from "@/schemas";
 import { defaultErrorMessage, defaultSuccessMessage } from "@/utils/default-messages";
 import { getUserByEmail } from "@/utils/fetchData/user";
+import { generateVerificationToken } from "./tokens";
+import { sendVerificationEmail } from "@/lib/mail";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
       const validateFields = RegisterSchema.safeParse(values);
@@ -36,7 +38,14 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
             },
       });
 
+      const verificationToken = await generateVerificationToken(email);
+
+      await sendVerificationEmail(
+            verificationToken.email,
+            verificationToken.token
+      )
+
       return ({
-            success: `${defaultSuccessMessage.userCreated}`
+            success: `Email de confirmação foi enviado`
       });
 };

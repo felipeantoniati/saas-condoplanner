@@ -33,8 +33,8 @@ export const LoginForm = () => {
 
             startTransition(() => {
                   login(values).then((data) => {
-                        seterrorMessage(data.error);
-                        setsuccessMessage(data.success);
+                        seterrorMessage(data?.error);
+                        setsuccessMessage(data?.success);
                   });
             });
       };
@@ -89,7 +89,7 @@ export const LoginForm = () => {
 
                         <Button
                               className="w-full"
-                              variant={"default"}
+                              variant={"login"}
                               disabled={isPeding}
                               size={"md"}
                               type="submit"
