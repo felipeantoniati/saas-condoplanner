@@ -1,6 +1,12 @@
 import * as z from "zod";
 import { defaultErrorMessage } from "@/utils/default-messages";
 
+export const Resetchema = z.object({
+      email: z.string().email({
+            message: `${defaultErrorMessage.isRequired}`
+      }),
+});
+
 export const LoginSchema = z.object({
       email: z.string().email({
             message: `${defaultErrorMessage.isRequired}`

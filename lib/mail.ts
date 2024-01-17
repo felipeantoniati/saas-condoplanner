@@ -17,3 +17,19 @@ export const sendVerificationEmail = async (
             `
       })
 };
+
+export const sendResetPasswordEmail = async (
+      email: string,
+      token: string,
+) => {
+      const resetLink = `http://localhost:3000/auth/new-password?token=${token}`;
+
+      await resend.emails.send({
+            from: "onboarding@resend.dev",
+            to: email,
+            subject: "Recuperação de senha",
+            html: `
+            <p>Clique <a href="${resetLink}">aqui</a> para definir uma nova senha</p>
+            `
+      });
+};

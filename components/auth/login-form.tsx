@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 
 import { login } from "@/utils/login-action";
 import { LoginSchema } from "@/schemas";
+import Link from "next/link";
 
 export const LoginForm = () => {
       const [errorMessage, seterrorMessage] = useState<string | undefined>("");
@@ -78,6 +79,16 @@ export const LoginForm = () => {
                                                             type="password"
                                                       />
                                                 </FormControl>
+                                                <Button
+                                                      size={"sm"}
+                                                      variant={"link"}
+                                                      asChild
+                                                      className="px-0"
+                                                >
+                                                      <Link href={"/auth/reset"}>
+                                                            Esqueceu a senha ?
+                                                      </Link>
+                                                </Button>
                                                 <FormMessage />
                                           </FormItem>
                                     )}
