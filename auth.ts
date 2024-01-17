@@ -39,8 +39,6 @@ export const {
       // login com email de verificação
       if (!existingUser?.emailVerified) return false;
 
-
-
       // TODO: Add 2f CHECK
       return true;
     },
