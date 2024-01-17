@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { useState, useTransition } from "react";
+import { use, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Button } from "@/components/ui/button";
@@ -14,9 +14,12 @@ import { Input } from "@/components/ui/input";
 import { login } from "@/utils/login-action";
 import { LoginSchema } from "@/schemas";
 import Link from "next/link";
+import { defaultErrorMessage } from "@/utils/default-messages";
 
 export const LoginForm = () => {
-      const [errorMessage, seterrorMessage] = useState<string | undefined>("");
+
+      const [showTwoFactor, setShowTwoFactor] = useState(false);
+      const [errorMessage, setError] = useState<string | undefined>("");
       const [successMessage, setsuccessMessage] = useState<string | undefined>("");
       const [isPeding, startTransition] = useTransition();
 
@@ -29,14 +32,23 @@ export const LoginForm = () => {
       });
 
       const submitLoginFormData = (values: z.infer<typeof LoginSchema>) => {
-            seterrorMessage("");
+            setError("");
             setsuccessMessage("");
 
             startTransition(() => {
                   login(values).then((data) => {
-                        seterrorMessage(data?.error);
-                        setsuccessMessage(data?.success);
-                  });
+                        if (data?.error) {
+                              form.reset();
+                              setError(data?.error)
+                        }
+                        if (data?.success) {
+                              form.reset();
+                              setError(data?.success)
+                        }
+                        if (data?.twoFactor) {
+                              setShowTwoFactor(true);
+                        }
+                  }).catch(() => setError(`${defaultErrorMessage.internalServerError}`))
             });
       };
 
@@ -46,53 +58,76 @@ export const LoginForm = () => {
                         className="space-y-6"
                         onSubmit={form.handleSubmit(submitLoginFormData)}
                   >
+                        {showTwoFactor && (
+                              <FormField
+                                    control={form.control}
+                                    name="code"
+                                    render={({ field }) => (
+                                          <FormItem>
+                                                <FormLabel>Código de autenticação</FormLabel>
+                                                <FormControl>
+                                                      <Input
+                                                            {...field}
+                                                            disabled={isPeding}
+                                                            placeholder="123456"
+                                                      />
+                                                </FormControl>
+                                                <FormMessage />
+                                          </FormItem>
+                                    )}
+                              />
+
+                        )}
+
                         <section className="space-y-4" >
-                              <FormField
-                                    control={form.control}
-                                    name="email"
-                                    render={({ field }) => (
-                                          <FormItem>
-                                                <FormLabel>Email</FormLabel>
-                                                <FormControl>
-                                                      <Input
-                                                            {...field}
-                                                            disabled={isPeding}
-                                                            placeholder="seuemail@example.com"
-                                                            type="email"
-                                                      />
-                                                </FormControl>
-                                                <FormMessage />
-                                          </FormItem>
-                                    )}
-                              />
-                              <FormField
-                                    control={form.control}
-                                    name="password"
-                                    render={({ field }) => (
-                                          <FormItem>
-                                                <FormLabel>Senha</FormLabel>
-                                                <FormControl>
-                                                      <Input
-                                                            {...field}
-                                                            disabled={isPeding}
-                                                            placeholder="*******"
-                                                            type="password"
-                                                      />
-                                                </FormControl>
-                                                <Button
-                                                      size={"sm"}
-                                                      variant={"link"}
-                                                      asChild
-                                                      className="px-0"
-                                                >
-                                                      <Link href={"/auth/reset"}>
-                                                            Esqueceu a senha ?
-                                                      </Link>
-                                                </Button>
-                                                <FormMessage />
-                                          </FormItem>
-                                    )}
-                              />
+                              {!showTwoFactor && (<>
+                                    <FormField
+                                          control={form.control}
+                                          name="email"
+                                          render={({ field }) => (
+                                                <FormItem>
+                                                      <FormLabel>Email</FormLabel>
+                                                      <FormControl>
+                                                            <Input
+                                                                  {...field}
+                                                                  disabled={isPeding}
+                                                                  placeholder="seuemail@example.com"
+                                                                  type="email"
+                                                            />
+                                                      </FormControl>
+                                                      <FormMessage />
+                                                </FormItem>
+                                          )}
+                                    />
+                                    <FormField
+                                          control={form.control}
+                                          name="password"
+                                          render={({ field }) => (
+                                                <FormItem>
+                                                      <FormLabel>Senha</FormLabel>
+                                                      <FormControl>
+                                                            <Input
+                                                                  {...field}
+                                                                  disabled={isPeding}
+                                                                  placeholder="*******"
+                                                                  type="password"
+                                                            />
+                                                      </FormControl>
+                                                      <Button
+                                                            size={"sm"}
+                                                            variant={"link"}
+                                                            asChild
+                                                            className="px-0"
+                                                      >
+                                                            <Link href={"/auth/reset"}>
+                                                                  Esqueceu a senha ?
+                                                            </Link>
+                                                      </Button>
+                                                      <FormMessage />
+                                                </FormItem>
+                                          )}
+                                    />
+                              </>)}
                         </section>
 
                         <FormError message={errorMessage} />
@@ -105,7 +140,7 @@ export const LoginForm = () => {
                               size={"md"}
                               type="submit"
                         >
-                              Entrar
+                              {showTwoFactor ? "Confirmar" : "Entrar"}
                         </Button>
                   </form>
             </Form>
