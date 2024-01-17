@@ -2,6 +2,20 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+export const sendTwoFactorTokenEmail = async (
+      email: string,
+      token: string,
+) => {
+      await resend.emails.send({
+            from: "onboarding@resend.dev",
+            to: email,
+            subject: "Código  para autenticação em 2 fatores",
+            html: `
+            <p>Seu código de autenticação: ${token}</p>
+            `
+      })
+};
+
 export const sendVerificationEmail = async (
       email: string,
       token: string,
