@@ -7,6 +7,12 @@ export const Resetchema = z.object({
       }),
 });
 
+export const NewPasswordSchema = z.object({
+      password: z.string().min(6, {
+            message: `${defaultErrorMessage.passwordLength}`
+      }),
+});
+
 export const LoginSchema = z.object({
       email: z.string().email({
             message: `${defaultErrorMessage.isRequired}`

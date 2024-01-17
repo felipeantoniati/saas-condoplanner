@@ -3,7 +3,7 @@
 import { db } from "@/lib/db";
 import { getUserByEmail } from "@/utils/fetchData/user";
 import { getVerificationTokenByToken } from "@/utils/verification-token";
-import { defaultErrorMessage } from "./default-messages";
+import { defaultErrorMessage } from "@/utils/default-messages";
 
 export const newVerification = async (token: string) => {
       const existingToken = await getVerificationTokenByToken(token)
@@ -19,7 +19,6 @@ export const newVerification = async (token: string) => {
       }
 
       const existinUser = await getUserByEmail(existingToken.email)
-      console.log(existinUser);
 
       if (!existinUser) {
             return { error: `Email não existe` };
