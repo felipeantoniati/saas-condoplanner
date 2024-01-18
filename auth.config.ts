@@ -3,8 +3,7 @@ import bcryptjs from "bcryptjs";
 
 import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "./schemas";
-import { getUserByEmail } from "./utils/fetchData/user";
-
+import { getUserByEmail } from "./utils/data/get-user";
 
 export default {
       providers: [
@@ -27,7 +26,7 @@ export default {
                         }
 
                         return null;
-                  }
-            })
+                  },
+            }),
       ],
-} satisfies NextAuthConfig
+} satisfies NextAuthConfig;

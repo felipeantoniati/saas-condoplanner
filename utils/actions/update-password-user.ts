@@ -3,13 +3,14 @@
 import * as z from "zod";
 import bcryptjs from "bcryptjs";
 
-import { NewPasswordSchema } from "@/schemas";
-import { defaultErrorMessage } from "./default-messages";
-import { getPasswordToResetTokenByToken } from "./password-reset-token";
-import { getUserByEmail } from "./fetchData/user";
 import { db } from "@/lib/db";
+import { NewPasswordSchema } from "@/schemas";
 
-export const newPassword = async (
+import { defaultErrorMessage, defaultSuccessMessage } from "@/utils/constants/default-messages";
+import { getPasswordToResetTokenByToken } from "@/utils/data/get-password-reset-token";
+import { getUserByEmail } from "@/utils/data/get-user";
+
+export const handleUpdateNewPassword = async (
       values: z.infer<typeof NewPasswordSchema>,
       token?: string | null
 ) => {
@@ -34,13 +35,13 @@ export const newPassword = async (
       const hasExpired = new Date(existingToken.expires) < new Date();
 
       if (hasExpired) {
-            return { error: `Token Expirado` };
+            return { error: `${defaultErrorMessage.expiredToken}` };
       }
 
       const existinUser = await getUserByEmail(existingToken.email)
 
       if (!existinUser) {
-            return { error: `Email não existe` };
+            return { error: `${defaultErrorMessage.notExistEmail}` };
       }
 
       const hashedPassword = await bcryptjs.hash(password, 10);
@@ -50,5 +51,5 @@ export const newPassword = async (
             data: { password: hashedPassword }
       })
 
-      return { success: "Senha Atualizada com sucesso" }
+      return { success: `${defaultSuccessMessage.updatedPassword}` }
 }

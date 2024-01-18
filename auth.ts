@@ -5,8 +5,8 @@ import { UserRole } from "@prisma/client"
 
 import authConfig from "@/auth.config"
 import { db } from "@/lib/db"
-import { getUserById } from "@/utils/fetchData/user"
-import { getTwoFactorConfirmationByUserId } from "./utils/two-factor-confirmation"
+import { getUserById } from "./utils/data/get-user"
+import { getTwoFactorConfirmationByUserId } from "./utils/data/get-two-factor-confirmation"
 
 
 export const {
@@ -15,12 +15,13 @@ export const {
   signIn,
   signOut
 } = NextAuth({
+
   pages: {
     signIn: "auth/login",
     error: "auth/error",
   },
-  events: {
 
+  events: {
     async linkAccount({ user }) {
       await db.user.update({
         where: { id: user.id },
@@ -28,16 +29,13 @@ export const {
       })
     }
   },
+
   callbacks: {
-    async signIn({
-      user, account
-    }) {
-      // OAuth com email de verificação
-      if (account?.provider !== "credentials") return true;
+    async signIn({ user, account }) {
+      if (account?.provider !== "credentials") return true; // alterar para não permitir provider Google/Git etc..
 
       const existingUser = await getUserById(user.id);
 
-      // login com email de verificação
       if (!existingUser?.emailVerified) return false;
 
       if (existingUser.isTwoFactorEnable) {
@@ -45,14 +43,12 @@ export const {
 
         if (!twoFactorConfirmation) return false;
 
-        await db.twoFactorConfirmation.delete({
-          where: { id: twoFactorConfirmation.id }
-        })
-
+        await db.twoFactorConfirmation.delete({ where: { id: twoFactorConfirmation.id } })
       };
 
       return true;
     },
+
     async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.id = token.sub;
@@ -77,6 +73,7 @@ export const {
       return token;
     }
   },
+
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   ...authConfig,

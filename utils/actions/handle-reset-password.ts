@@ -2,13 +2,13 @@
 
 import * as z from "zod";
 import { Resetchema } from "@/schemas"
-import { getUserByEmail } from "./fetchData/user"
-import { defaultErrorMessage } from "./default-messages";
-import { sendResetPasswordEmail } from "@/lib/mail";
-import { generateResetPasswordToken } from "./tokens";
+import { getUserByEmail } from "../data/get-user";
+import { defaultErrorMessage, defaultSuccessMessage } from "../constants/default-messages";
+import { sendResetPasswordEmail } from "@/lib/send-mails";
+import { generateResetPasswordToken } from "./generate-tokens";
 
 
-export const resetPassword = async (values: z.infer<typeof Resetchema>) => {
+export const handleResetPassword = async (values: z.infer<typeof Resetchema>) => {
       const validateFields = Resetchema.safeParse(values)
 
       if (!validateFields.success) {
@@ -30,5 +30,5 @@ export const resetPassword = async (values: z.infer<typeof Resetchema>) => {
             passwordResetToken.token
       );
 
-      return { success: "Email enviado com sucesso" }
-}
+      return { success: `${defaultSuccessMessage.emailSent}` };
+};

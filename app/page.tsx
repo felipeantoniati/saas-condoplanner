@@ -1,7 +1,7 @@
 import { Poppins } from "next/font/google";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { LoginButton } from "@/components/auth/login-button";
+import { cn } from "@/lib/tw-merge";
+import { LoginButton } from "@/components/auth/LoginButton";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -31,6 +31,7 @@ export default function Home() {
           Software de gestão de condomínios
         </p>
       </section>
+
       <LoginButton>
         <Button size={"lg"} variant={"default"}>
           Faça o Login

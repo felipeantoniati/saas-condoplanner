@@ -5,30 +5,27 @@ import bcrypt from "bcryptjs";
 
 import { db } from "@/lib/db";
 import { RegisterSchema } from "@/schemas";
-import { defaultErrorMessage, defaultSuccessMessage } from "@/utils/default-messages";
-import { getUserByEmail } from "@/utils/fetchData/user";
-import { generateVerificationToken } from "./tokens";
-import { sendVerificationEmail } from "@/lib/mail";
+import { defaultErrorMessage, defaultSuccessMessage } from "../constants/default-messages";
+import { getUserByEmail } from "../data/get-user";
+import { generateVerificationToken } from "./generate-tokens";
+import { sendVerificationEmail } from "@/lib/send-mails";
 
-export const register = async (values: z.infer<typeof RegisterSchema>) => {
+export const handleRegister = async (values: z.infer<typeof RegisterSchema>) => {
       const validateFields = RegisterSchema.safeParse(values);
 
       if (!validateFields.success) {
-            return {
-                  error: `${defaultErrorMessage.isInvalid}`
-            };
+            return { error: `${defaultErrorMessage.isInvalid}` };
       };
 
       const { name, email, password } = validateFields.data;
+      
       const hashedPassword = await bcrypt.hash(password, 10);
 
       const existingUser = await getUserByEmail(email);
 
       if (existingUser) {
-            return {
-                  error: `${defaultErrorMessage.existEmail}`
-            };
-      }
+            return { error: `${defaultErrorMessage.existEmail}` };
+      };
 
       await db.user.create({
             data: {
@@ -43,9 +40,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       await sendVerificationEmail(
             verificationToken.email,
             verificationToken.token
-      )
+      );
 
-      return ({
-            success: `Email de confirmação foi enviado`
-      });
+      return ({ success: `${defaultSuccessMessage.emailConfirmSent}` });
 };
