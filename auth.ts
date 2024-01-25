@@ -1,13 +1,10 @@
 import NextAuth from "next-auth"
-
 import { PrismaAdapter } from "@auth/prisma-adapter"
-import { UserRole } from "@prisma/client"
-
-import authConfig from "@/auth.config"
 import { db } from "@/lib/db"
-import { getUserById } from "./utils/data/get-user"
-import { getTwoFactorConfirmationByUserId } from "./utils/data/get-two-factor-confirmation"
-
+import authConfig from "@/auth.config"
+import { UserRole } from "@prisma/client"
+import { getUserById } from "@/utils/database-searches/get-user-data"
+import { getTwoFactorConfirmationByUserId } from "@/utils/database-searches/get-two-factor-confirmation"
 
 export const {
   handlers: { GET, POST },
@@ -15,7 +12,6 @@ export const {
   signIn,
   signOut
 } = NextAuth({
-
   pages: {
     signIn: "auth/login",
     error: "auth/error",
@@ -32,7 +28,7 @@ export const {
 
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider !== "credentials") return true; // alterar para não permitir provider Google/Git etc..
+      if (account?.provider !== "credentials") return true;
 
       const existingUser = await getUserById(user.id);
 
@@ -43,9 +39,11 @@ export const {
 
         if (!twoFactorConfirmation) return false;
 
-        await db.twoFactorConfirmation.delete({ where: { id: twoFactorConfirmation.id } })
-      };
+        await db.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id }
+        })
 
+      };
       return true;
     },
 

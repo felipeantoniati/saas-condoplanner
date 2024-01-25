@@ -1,7 +1,3 @@
-import { NewVerificationForm } from "@/components/auth/NewVerificationForm";
-
-const NewVerificationPage = () => {
-      return <NewVerificationForm />
-};
-
+import { AutoConfirmationEmailForm } from "@/components/auth-form/AutoConfirmationEmailForm";
+const NewVerificationPage = () => <AutoConfirmationEmailForm />;
 export default NewVerificationPage;

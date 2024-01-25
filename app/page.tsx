@@ -1,43 +1,38 @@
 import { Poppins } from "next/font/google";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/tw-merge";
-import { LoginButton } from "@/components/auth/LoginButton";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
-const font = Poppins({
+const fontPoppins = Poppins({
   subsets: ["latin"],
   weight: ["600"],
-})
+});
 
 export default function Home() {
   return (
-    <main className='h-full flex flex-col items-center justify-center gap-5 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-500 to-blue-800'>
-      <section className="max-w-screen-sm flex flex-col justify-center items-center gap-3">
-        <div className="flex flex-col items-center gap-2">
-          <img
-            className="w-28"
-            alt="Logotipo do Condoplanner"
-            src="/condoplanner.svg"
-          />
-          <h1 className={
-            cn(
-              "text-6xl font-semibold text-white text-center drop-shadow-md",
-              font.className,
-            )
-          }>
-            condoplanner
-          </h1>
-        </div>
-        <p className="ml-2 text-2xl text-white text-center">
+    <section className="w-full h-full pt-40 flex flex-col gap-4 items-center text-center text-white tracking-wider">
+      <img
+        src="/condoplanner.svg"
+        alt="Logotipo do Condoplanner"
+        className="w-24"
+      />
+
+      <div className={"space-y-2 mb-4"}>
+        <h1 className={cn(
+          "text-4xl sm:text-6xl font-semibold transition-all duration-300",
+          fontPoppins
+        )}>
+          condoplanner
+        </h1>
+
+        <p className="text-lg sm:text-2xl font-light transition-all duration-300">
           Software de gestão de condomínios
         </p>
-      </section>
+      </div>
 
-      <LoginButton>
-        <Button size={"lg"} variant={"default"}>
-          Faça o Login
-        </Button>
-      </LoginButton>
-    </main >
-  )
-}
 
+      <Link href={"/auth/login"} className="h-12 rounded-md px-8 text-lg tracking-wider bg-blue-800 text-white hover:bg-blue-700 hover:shadow-md flex items-center justify-center">
+        Faça o Login
+      </Link>
+    </section>
+  );
+};

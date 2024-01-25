@@ -1,0 +1,22 @@
+{
+      "dataNotFound": "Nenhum dado foi encontrado",
+      "methodNotAllowed": "Método não permitido",
+      "devPeriod": "Estamos em Desenvolvimento, no momento não é possível utilizar novos e-mails.",
+      "internalServerError": "Ocorreu um erro interno no servidor durante a solicitação.",
+      "expiredCode": "Código de autenticação expirado. Por favor, solicite um novo código.",
+      "invalidCode": "Código de autenticação inválido. Por favor, insira um código válido.",
+      "expiredToken": "Token de confirmação de conta expirado. Por favor, solicite um novo token.",
+      "invalidToken": "Token inexiste.Por favor, insira um token válido e atualizado.",
+      "requiredField": "Este campo é obrigatório",
+      "invalidFields": "Campos inválidos ou inexistentes. Por favor, insira campos válidos.",
+      "invalidCredentials": "Credenciais Inválidas! Por favor, tente novamente.",
+      "passwordLength": "Insira no mínimo 6 caractéres para senha",
+      "nonExistingEmail": "Usuário inexistente! Por favor, insira credenciais válidas.",
+      "existingEmail": "Este e-mail ja esta em uso. Por favor, tente um e-mail diferente.",
+      "invalidEmail": "Por favor insira um email válido",
+      "verificationEmailSent": "Um E-mail de confirmação foi enviado. Por favor, verifique sua caixa de entrada para válidar sua conta.",
+      "verifyConfirmationEmail": "E-mail de confirmação enviado. Por favor, verifique sua caixa de entrada para confirmar seu cadastro.",
+      "confirmEmail": "E-mail confirmado com sucesso! Agora você pode fazer o Login na sua conta com seu email e senha.",
+      "resetEmail": "O E-mail para redefinição de senha foi enviado com sucesso. Por favor, verifique sua caixa de entrada.",
+      "updatePasswordSuccessfully": "Senha atualizada com sucesso. Agora você pode fazer o login com sua nova senha. "
+}
